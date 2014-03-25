@@ -4,9 +4,9 @@ namespace database;
 
 require_once( dirname( __FILE__ )."/Object.class.php" );
 
-final class Bill extends Object
+final class Transaction extends Object
 {
-	protected static $schema = "bank";
+	protected static $schema = "money";
 	protected static $table = "transaction";
 	
 	protected static $fields = array(
@@ -33,9 +33,9 @@ final class Bill extends Object
 		),
 		"amount" => array(
 			"type"				=> "decimal",
-			"integerPart"		=> 5,
+			"integerPart"		=> 9,
 			"fractionalPart"	=> 2,
-			"unsigned"			=> true,
+			"unsigned"			=> false,
 			"null"				=> false,
 			"default"			=> 0.0
 		),

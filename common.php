@@ -8,7 +8,7 @@ require_once( RootPath. "/classes/database/Object.class.php" );
 use database\Database;
 use database\Object;
 
-new Database( "127.0.0.1", 3306, "bank", "bank", "bank" );
+new Database( "127.0.0.1", 3306, "money", "money", "money" );
 
 /*require_once( RootPath.'/classes/internet/Template.class.php' );
 $template = new Template( RootPath. '/templates/'. TemplateName );

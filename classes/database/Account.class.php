@@ -6,7 +6,7 @@ require_once( dirname( __FILE__ )."/Object.class.php" );
 
 final class Account extends Object
 {
-	protected static $schema = "bank";
+	protected static $schema = "money";
 	protected static $table = "account";
 	
 	protected static $fields = array(
@@ -22,9 +22,9 @@ final class Account extends Object
 		),
 		"amount" => array(
 			"type"				=> "decimal",
-			"integerPart"		=> 5,
+			"integerPart"		=> 9,
 			"fractionalPart"	=> 2,
-			"unsigned"			=> true,
+			"unsigned"			=> false,
 			"null"				=> false,
 			"default"			=> 0.0
 		)
