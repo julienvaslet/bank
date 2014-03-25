@@ -23,17 +23,40 @@ if( array_key_exists( "account", $_POST ) && !empty( $_POST["account"] ) )
 
 	if( array_key_exists( "content", $_POST ) && !empty( $_POST["content"] ) )
 	{
-		// transaction_date,value_date,amount,label,account_amount
+		$importTransactions = false;
+		$lastTransaction = NULL;
+		
+		if( $account->amount != NULL )
+		{
+			$lastTransactions = Transaction::get( array( "account_id" => $account->account_id ), "transaction_id DESC", 1, 1 );
+			
+			if( count( $lastTransactions ) > 0 )
+				$lastTransaction = $lastTransactions[0];
+			else
+				$importTransactions = true;
+		}
+		else
+			$importTransactions = true;
+		
 		$csvTransactions = preg_split( "/[\r\n]+/", $_POST["content"] );
 		
 		foreach( $csvTransactions as $csvTransaction )
 		{
+			// transaction_date,value_date,amount,label,account_amount
 			$values = str_getcsv( $csvTransaction );
 			var_dump( $values );
 			
 			if( count( $values ) == 5 )
 			{
-				//...
+				if( $importTransactions === false )
+				{
+					// Compare transaction_date and account amount
+					// May use multiple last transactions... ? 
+				}
+				else
+				{
+					// Process CSV line
+				}
 			}
 			else
 			{
