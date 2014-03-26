@@ -90,7 +90,7 @@ if( array_key_exists( "account", $_POST ) && !empty( $_POST["account"] ) )
 				}
 
 				// Process CSV line
-				$parsedLabel = parseTransactionLabel( $values[3] );
+				$parsedLabel = parseTransactionLabel( $values[3], convertBankDate( $values[0] ) );
 				
 				$transactionId = Transaction::create( array(
 					"account_id" => $account->account_id,
@@ -112,7 +112,7 @@ if( array_key_exists( "account", $_POST ) && !empty( $_POST["account"] ) )
 			}
 			else
 			{
-				// handle error ?
+				// handle error ? 
 			}
 		}
 	}
