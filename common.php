@@ -30,7 +30,7 @@ function parseTransactionLabel( $label, $transactionDate )
 	if( preg_match( "/^PAIEMENT CB ([0-9]{2})([0-9]{2}) /", $label, $matches ) )
 	{
 		$parsedLabel["type"] = "credit-card";
-		$pasredLabel["real_date"] = $transactionDateElements[0]."-".$matches[2]."-".$matches[1];
+		$parsedLabel["real_date"] = $transactionDateElements[0]."-".$matches[2]."-".$matches[1];
 		$parsedLabel["short_label"] = preg_replace( "/ CARTE [\*0-9]+$/", "", substr( $label, strlen( $matches[0] ) ) );
 	}
 	
@@ -42,7 +42,7 @@ function parseTransactionLabel( $label, $transactionDate )
 	}
 	
 	// Transfer
-	else if( preg_match( "/^VIR (SEPA)? /", $label, $matches ) )
+	else if( preg_match( "/^VIR( SEPA)? /", $label, $matches ) )
 	{
 		$parsedLabel["type"] = "transfer";
 		$parsedLabel["short_label"] = substr( $label, strlen( $matches[0] ) );
@@ -56,7 +56,7 @@ function parseTransactionLabel( $label, $transactionDate )
 	}
 	
 	// Debit
-	else if( preg_match( "/^PRLV (SEPA)? /", $label, $matches ) )
+	else if( preg_match( "/^PRLV( SEPA)? /", $label, $matches ) )
 	{
 		$parsedLabel["type"] = "debit";
 		$parsedLabel["short_label"] = substr( $label, strlen( $matches[0] ) );
@@ -66,7 +66,7 @@ function parseTransactionLabel( $label, $transactionDate )
 	else if( preg_match( "/^RETRAIT DAB ([0-9]{2})([0-9]{2}) /", $label, $matches ) )
 	{
 		$parsedLabel["type"] = "withdrawal";
-		$pasredLabel["real_date"] = $transactionDateElements[0]."-".$matches[2]."-".$matches[1];
+		$parsedLabel["real_date"] = $transactionDateElements[0]."-".$matches[2]."-".$matches[1];
 		$parsedLabel["short_label"] = preg_replace( "/ CARTE [\*0-9]+$/", "", substr( $label, strlen( $matches[0] ) ) );
 	}
 	
