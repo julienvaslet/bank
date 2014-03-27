@@ -24,7 +24,7 @@ function parseTransactionLabel( $label, $transactionDate )
 		"short_label" => NULL
 	);
 	
-	$transactionDateElements = explode( "-", $transationDate );
+	$transactionDateElements = explode( "-", $transactionDate );
 	
 	// Credit card
 	if( preg_match( "/^PAIEMENT CB ([0-9]{2})([0-9]{2}) /", $label, $matches ) )
