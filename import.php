@@ -10,7 +10,7 @@ if( array_key_exists( "account", $_POST ) && !empty( $_POST["account"] ) )
 {
 	$account = NULL;
 	$accounts = Account::get( array( "account_name" => $_POST["account"] ) );
-	
+
 	if( count( $accounts ) > 0 )
 		$account = $accounts[0];
 
@@ -76,7 +76,7 @@ if( array_key_exists( "account", $_POST ) && !empty( $_POST["account"] ) )
 					) );
 
 					if( $accountId !== false )
-						$account = Account::getInstance( $accountId );
+						$account = Account::getInstance( array( "account_id" => $accountId ) );
 				}
 
 				// Process CSV line
