@@ -12,7 +12,10 @@ if( array_key_exists( "account", $_POST ) && !empty( $_POST["account"] ) )
 	$accounts = Account::get( array( "account_name" => $_POST["account"] ) );
 
 	if( count( $accounts ) > 0 )
+	{
 		$account = $accounts[0];
+		echo "Account found: ".$account->account_name." (".$account->account_id.")\n";
+	}
 
 	if( array_key_exists( "content", $_POST ) && !empty( $_POST["content"] ) )
 	{
@@ -26,12 +29,17 @@ if( array_key_exists( "account", $_POST ) && !empty( $_POST["account"] ) )
 			if( count( $lastTransactionSet ) > 0 )
 				$lastTransactions = Transaction::get( array( "account_id" => $account->account_id, "transaction_date" => $lastTransactionSet[0]->transaction_date ), "transaction_id DESC" );
 			else
+			{
+				echo "The account is empty. Every transaction will be imported.\n";
 				$importTransactions = true;
+			}
 		}
 		else
 			$importTransactions = true;
-		
-		$csvTransactions = preg_split( "/[\r\n]+/", $_POST["content"] );
+
+			
+		$csvTransactions = preg_split( "/[\r\n]+/", trim( $_POST["content"] ) );
+		echo "There is ".count( $csvTransactions )." posted lines.\n";
 		
 		foreach( $csvTransactions as $csvTransaction )
 		{
@@ -43,7 +51,10 @@ if( array_key_exists( "account", $_POST ) && !empty( $_POST["account"] ) )
 				if( $importTransactions === false )
 				{
 					if( convertBankDate( $values[0] ) > $lastTransactions[0]->transaction_date )
+					{
+						echo "Transaction date is more recent than the last saved transaction. Next transactions will be imported.\n";
 						$importTransactions = true;
+					}
 					else if( convertBankDate( $values[0] ) == $lastTransactions[0]->transaction_date )
 					{
 						$amount = floatval( $account->amount );
@@ -51,6 +62,12 @@ if( array_key_exists( "account", $_POST ) && !empty( $_POST["account"] ) )
 						$importTransactions = true;
 						for( $i = 0 ; $i < count( $lastTransactions ) ; $i++ )
 						{
+							//echo "----vs----\n";
+							//echo convertBankDate( $values[1] )." vs ".$lastTransactions[$i]->value_date."\n";
+							//echo floatval( $values[2] )." vs ".floatval( $lastTransactions[$i]->amount )."\n";
+							//echo $values[3]." vs ".$lastTransactions[$i]->label."\n";
+							//echo floatval( $values[4] )." vs ".floatval( $amount )."\n";
+
 							if( convertBankDate( $values[1] ) == $lastTransactions[$i]->value_date
 							 && floatval( $values[2] ) == floatval( $lastTransactions[$i]->amount )
 							 && $values[3] == $lastTransactions[$i]->label
@@ -60,7 +77,14 @@ if( array_key_exists( "account", $_POST ) && !empty( $_POST["account"] ) )
 								break;
 							}
 
+							
+
 							$amount -= floatval( $lastTransactions[$i]->amount );
+						}
+
+						if( $importTransactions == true )
+						{
+							echo "New daily transaction detected. Next transactions will be imported.\n";
 						}
 					}
 
@@ -76,7 +100,10 @@ if( array_key_exists( "account", $_POST ) && !empty( $_POST["account"] ) )
 					) );
 
 					if( $accountId !== false )
+					{
 						$account = Account::getInstance( array( "account_id" => $accountId ) );
+						echo "Account created: ".$account->account_name." (".$account->account_id.")\n";
+					}
 				}
 
 				// Process CSV line
@@ -95,13 +122,15 @@ if( array_key_exists( "account", $_POST ) && !empty( $_POST["account"] ) )
 
 				if( $transactionId !== false )
 				{
+					echo "Imported transaction #".$transactionId." of amount: ".floatval( $values[2] )."\n";
 					$account->amount = floatval( $values[4] );
 					$account->save();
 				}
 			}
 			else
 			{
-				// handle error ? 
+				echo "Warning: CSV file has a wrong number of columns (".count( $values )." instead of 5).\n";
+				echo "Debug line:\n----".$csvTransaction."\n----\n";
 			}
 		}
 	}
