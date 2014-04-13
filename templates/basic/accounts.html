@@ -1,0 +1,65 @@
+<include file="header.html" />
+		<div class="header">
+			<h1>Comptes</h1>
+		</div>
+		<div class="content pure-g-r">
+			<block name="account">
+			<div id="acid" class="pure-u-1-2">
+				<canvas class="chart"></canvas>
+				<h2>{account.name}<span class="amount">{account.amount}</span></h2>
+				<table class="pure-table pure-table-bordered pure-table-striped">
+					<tbody>
+						<block name="transaction">
+						<if exp="{transaction.odd}">
+						<tr class="pure-table-odd">
+						<else />
+						<tr>
+						</if>
+							<td>
+								{transaction.label}
+								<span class="date">{transaction.date}</span>
+							</td>
+							<td class="amount">{transaction.amount}</td>
+						</tr>
+						</block>
+					</tbody>
+				</table>
+			</div>
+			</block>
+		</div>
+		
+		<script type="text/javascript">
+		var accounts = {};
+		
+		accounts["acid"] = {"20/02/2014":1500.00,"25/02/2014":3526.77,"27/02/2014":2947.77,"03/03/2014":1997.77};
+
+		jQuery( function()
+		{
+			for( var account in accounts )
+			{
+				var ctx = $("#" + account + " > canvas.chart").get( 0 ).getContext( "2d" );
+				var data = {
+					labels : [],
+					datasets : [
+						{
+							fillColor : "rgba(151,187,205,0.5)",
+							strokeColor : "rgba(151,187,205,1)",
+							pointColor : "rgba(151,187,205,1)",
+							pointStrokeColor : "#fff",
+							data : []
+						}
+					]
+				};
+
+				for( var date in accounts[account] )
+				{
+					data.labels.push( date );
+					data.datasets[0].data.push( accounts[account][date] );
+				}
+			
+				var options = { "animation": false };
+				var chart = new Chart(ctx).Line( data, options );
+			}
+		} );
+		</script>
+<include file="footer.html" />
