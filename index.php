@@ -16,6 +16,8 @@ foreach( $accounts as $account )
 		"name" => htmlentities( $account->account_name ),
 		"amount" => number_format( $account->amount, 2, ",", "&nbsp;" )."&nbsp;&euro;"
 	) );
+	
+	// TODO: May gather past 3 monthes transactions... only print the 5 last one but create the graph with all.
 
 	$transactions = Transaction::get( array( "account_id" => $account->account_id ), "transaction_id DESC", 1, 5 );
 
@@ -24,8 +26,9 @@ foreach( $accounts as $account )
 	{
 		$accountBlock->addBlock( new Block( "transaction", array(
 			"label" => htmlentities( !is_null( $transaction->short_label ) ? $transaction->short_label : $transaction->label ),
-			"date" => !is_null( $transaction->real_date ) ? $transaction->real_date : $transaction->date,
+			"date" => !is_null( $transaction->real_date ) ? $transaction->real_date : $transaction->transaction_date,
 			"amount" => number_format( $transaction->amount, 2, ",", "&nbsp;" )."&nbsp;&euro;",
+			"type" => $transaction->type,
 			"odd" => $odd ? 1 : 0
 		) ) );
 
