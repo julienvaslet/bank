@@ -8,12 +8,12 @@ use database\Account;
 use database\Transaction;
 
 $accounts = Account::get();
-$oneMonthAgo = date( 'Y-m-d', mktime( 0, 0, 0, date('n') - 1, date('j'), date('Y') ) );
+$threeMonthesAgo = date( 'Y-m-d', mktime( 0, 0, 0, date('n') - 1, 1, date('Y') ) );
 
 foreach( $accounts as $account )
 {
 	$accountBlock = new Block( "account" );
-	$transactions = Transaction::get( array( "account_id" => $account->account_id, "transaction_date" => array( ">=", $oneMonthAgo ) ), "transaction_id DESC" );
+	$transactions = Transaction::get( array( "account_id" => $account->account_id, "transaction_date" => array( ">=", $threeMonthesAgo ) ), "transaction_id DESC" );
 
 	$accountBlock->addVariables( array(
 		"id" => $account->account_id,
