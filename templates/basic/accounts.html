@@ -1,11 +1,21 @@
 <include file="header.html" />
+		<script type="text/javascript">
+			var accounts = {};
+		</script>
 		<div class="header">
 			<h1>Comptes</h1>
 		</div>
 		<div class="content pure-g-r">
 			<block name="account">
-			<div id="acid" class="pure-u-1-2">
-				<canvas class="chart"></canvas>
+			<script type="text/javascript">
+				accounts["account-{account.id}"] = {
+				<block name="graphData">
+					"{graphData.date}": {graphData.amount}<if exp="{graphData.notLast}">,</if>
+				</block>
+				};
+			</script>
+			<div id="account-{account.id}" class="pure-u-1-2">
+				<canvas class="chart" width="600" height="300"></canvas>
 				<h2>{account.name}<span class="amount">{account.amount}</span></h2>
 				<table class="pure-table pure-table-bordered pure-table-striped">
 					<tbody>
@@ -29,10 +39,6 @@
 		</div>
 		
 		<script type="text/javascript">
-		var accounts = {};
-		
-		accounts["acid"] = {"20/02/2014":1500.00,"25/02/2014":3526.77,"27/02/2014":2947.77,"03/03/2014":1997.77};
-
 		jQuery( function()
 		{
 			for( var account in accounts )
@@ -57,7 +63,11 @@
 					data.datasets[0].data.push( accounts[account][date] );
 				}
 			
-				var options = { "animation": false };
+				var options = {
+					"animation": false,
+					"scaleLabel": "<%= value %> €"
+				};
+
 				var chart = new Chart(ctx).Line( data, options );
 			}
 		} );

@@ -62,22 +62,40 @@ if( array_key_exists( "account", $_POST ) && !empty( $_POST["account"] ) )
 						$importTransactions = true;
 						for( $i = 0 ; $i < count( $lastTransactions ) ; $i++ )
 						{
-							//echo "----vs----\n";
-							//echo convertBankDate( $values[1] )." vs ".$lastTransactions[$i]->value_date."\n";
-							//echo floatval( $values[2] )." vs ".floatval( $lastTransactions[$i]->amount )."\n";
-							//echo $values[3]." vs ".$lastTransactions[$i]->label."\n";
-							//echo floatval( $values[4] )." vs ".floatval( $amount )."\n";
+							// Values are casted to string in order to have
+							// a valid behavior
 
-							if( convertBankDate( $values[1] ) == $lastTransactions[$i]->value_date
-							 && floatval( $values[2] ) == floatval( $lastTransactions[$i]->amount )
-							 && $values[3] == $lastTransactions[$i]->label
-							 && floatval( $values[4] ) == floatval( $amount ) )
+							/* Debug outputs
+							echo "\n====transaction====\n";
+							echo "\n----date vs----\n";
+							var_dump( convertBankDate( $values[1] ) );
+							var_dump( $lastTransactions[$i]->value_date );
+							var_dump( convertBankDate( $values[1] ) == $lastTransactions[$i]->value_date );
+
+							echo "\n----amount vs----\n";
+							var_dump( (string) $values[2] );
+							var_dump( (string) $lastTransactions[$i]->amount );
+							var_dump( (string) $values[2] == (string) $lastTransactions[$i]->amount );
+
+							echo "\n----label vs----\n";
+							var_dump( (string) $values[3] );
+							var_dump( (string) $lastTransactions[$i]->label );
+							var_dump( (string) $values[3] == (string) $lastTransactions[$i]->label );
+
+							echo "\n----account amount vs----\n";
+							var_dump( (string) $values[4] );
+							var_dump( (string) $amount );
+							var_dump( (string) $values[4] == (string) $amount );
+							*/
+
+							if( (string) convertBankDate( $values[1] ) == (string) $lastTransactions[$i]->value_date
+							 && (string) $values[2] == (string) $lastTransactions[$i]->amount
+							 && (string) $values[3] == (string) $lastTransactions[$i]->label
+							 && (string) $values[4] == (string) $amount )
 							{
 								$importTransactions = false;
 								break;
 							}
-
-							
 
 							$amount -= floatval( $lastTransactions[$i]->amount );
 						}

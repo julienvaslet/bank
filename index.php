@@ -8,33 +8,65 @@ use database\Account;
 use database\Transaction;
 
 $accounts = Account::get();
+$oneMonthAgo = date( 'Y-m-d', mktime( 0, 0, 0, date('n') - 1, date('j'), date('Y') ) );
 
 foreach( $accounts as $account )
 {
 	$accountBlock = new Block( "account" );
+	$transactions = Transaction::get( array( "account_id" => $account->account_id, "transaction_date" => array( ">=", $oneMonthAgo ) ), "transaction_id DESC" );
+
 	$accountBlock->addVariables( array(
+		"id" => $account->account_id,
 		"name" => htmlentities( $account->account_name ),
-		"amount" => number_format( $account->amount, 2, ",", "&nbsp;" )."&nbsp;&euro;"
+		"amount" => number_format( $account->amount, 2, ",", "&nbsp;" )."&nbsp;&euro;",
+		"transctions_count" => count( $transactions )
 	) );
-	
-	// TODO: May gather past 3 monthes transactions... only print the 5 last one but create the graph with all.
 
-	$transactions = Transaction::get( array( "account_id" => $account->account_id ), "transaction_id DESC", 1, 5 );
-
+	// Show the last 5 transactions
 	$odd = true;
-	foreach( $transactions as $transaction )
+	for( $i = 0 ; $i < count( $transactions ) && $i < 5 ; $i++ )
 	{
 		$accountBlock->addBlock( new Block( "transaction", array(
-			"label" => htmlentities( !is_null( $transaction->short_label ) ? $transaction->short_label : $transaction->label ),
-			"date" => !is_null( $transaction->real_date ) ? $transaction->real_date : $transaction->transaction_date,
-			"amount" => number_format( $transaction->amount, 2, ",", "&nbsp;" )."&nbsp;&euro;",
-			"type" => $transaction->type,
+			"label" => htmlentities( !is_null( $transactions[$i]->short_label ) ? $transactions[$i]->short_label : $transactions[$i]->label ),
+			"date" => !is_null( $transactions[$i]->real_date ) ? $transactions[$i]->real_date : $transactions[$i]->transaction_date,
+			"amount" => number_format( $transactions[$i]->amount, 2, ",", "&nbsp;" )."&nbsp;&euro;",
+			"type" => $transactions[$i]->type,
 			"odd" => $odd ? 1 : 0
 		) ) );
 
 		$odd = !$odd;
 	}
 
+	// Create graph data for the past month transactions
+	$amounts = array();
+	$amounts[date("Y-m-d")] = floatval( $account->amount );
+	$tempAmount = floatval( $account->amount );
+
+	foreach( $transactions as $transaction )
+	{
+		if( !array_key_exists( $transaction->transaction_date, $amounts ) )
+			$amounts[$transaction->transaction_date] = $tempAmount;
+		
+		$tempAmount -= floatval( $transaction->amount );
+	}
+
+	$dates = array_keys( $amounts );
+	sort( $dates );
+	$amounts[date( "Y-m-d", strtotime( $dates[0] ) - 86400 )] = $tempAmount;
+
+	ksort( $amounts );
+
+	$i = 0;
+	foreach( $amounts as $date => $amount )
+	{
+		$accountBlock->addBlock( new Block( "graphData", array(
+			"date" => $date,
+			"amount" => $amount,
+			"notLast" => $i != count( $amounts ) - 1
+		) ) );
+		$i++;
+	}
+	
 	$template->addBlock( $accountBlock );
 }
 
