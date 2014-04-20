@@ -9,27 +9,31 @@
 			<block name="account">
 			<script type="text/javascript">
 				accounts["account-{account.id}"] = {
-				<block name="graphData">
-					"{graphData.date}": {graphData.amount}<if exp="{graphData.notLast}">,</if>
+				<block name="graphMonth">
+					"{graphMonth.month}": {
+					<block name="graphDay">
+					"{graphDay.day}": {graphDay.amount}<if exp="{graphDay.notLast}">,</if>
+					</block>
+					}<if exp="{graphMonth.notLast}">,</if>
 				</block>
 				};
 			</script>
 			<div id="account-{account.id}" class="pure-u-1-2">
 				<canvas class="chart" width="600" height="300"></canvas>
-				<h2>{account.name}<span class="amount">{account.amount}</span></h2>
+				<h2>{account.name}<span class="amount">{account.amount}&nbsp;{language.currency}</span></h2>
 				<table class="pure-table pure-table-bordered pure-table-striped">
 					<tbody>
 						<block name="transaction">
 						<if exp="{transaction.odd}">
-						<tr class="pure-table-odd">
+						<tr class="pure-table-odd transaction transaction-{transaction.type} transaction-{transaction.value}">
 						<else />
-						<tr>
+						<tr class="transaction transaction-{transaction.type}">
 						</if>
 							<td>
 								{transaction.label}
 								<span class="date">{transaction.date}</span>
 							</td>
-							<td class="amount">{transaction.amount}</td>
+							<td class="amount">{transaction.amount}&nbsp;{language.currency}</td>
 						</tr>
 						</block>
 					</tbody>
@@ -41,26 +45,62 @@
 		<script type="text/javascript">
 		jQuery( function()
 		{
+			var curveColors = [ {
+				"fillColor": "rgba(151,187,205,0.5)",
+				"strokeColor": "rgba(151,187,205,1.0)",
+				"pointColor": "rgba(151,187,205,1.0)",
+				"pointStrokeColor": "#ffffff"
+			},
+			{
+				"fillColor": "rgba(220,220,220,0.5)",
+				"strokeColor": "rgba(220,220,220,1.0)",
+				"pointColor": "rgba(220,220,220,1.0)",
+				"pointStrokeColor": "#ffffff"
+			} ];
+
 			for( var account in accounts )
 			{
 				var ctx = $("#" + account + " > canvas.chart").get( 0 ).getContext( "2d" );
 				var data = {
 					labels : [],
-					datasets : [
-						{
-							fillColor : "rgba(151,187,205,0.5)",
-							strokeColor : "rgba(151,187,205,1)",
-							pointColor : "rgba(151,187,205,1)",
-							pointStrokeColor : "#fff",
-							data : []
-						}
-					]
+					datasets : []
 				};
 
-				for( var date in accounts[account] )
+				for( var i = 1 ; i <= 31 ; i++ )
+					data.labels.push( i );
+				
+				var iMonth = 0;
+				for( var month in accounts[account] )
 				{
-					data.labels.push( date );
-					data.datasets[0].data.push( accounts[account][date] );
+					var dataset = {
+						"fillColor": curveColors[iMonth].fillColor,
+						"strokeColor": curveColors[iMonth].strokeColor,
+						"pointColor": curveColors[iMonth].pointColor,
+						"pointStrokeColor": curveColors[iMonth].pointStrokeColor,
+						"data": []
+					};
+
+					var lastAmount = null;
+					var lastDay = "";
+
+					for( var day in accounts[account][month] )
+						lastDay = day;
+ 
+					for( var i in data.labels )
+					{
+						if( typeof accounts[account][month][data.labels[i]] != "undefined" )
+						{
+							dataset.data.push( accounts[account][month][data.labels[i]] );
+							lastAmount = accounts[account][month][data.labels[i]];
+						}
+						else if( lastAmount != null && lastDay >= data.labels[i] )
+							dataset.data.push( lastAmount );
+						else if( lastAmount != null )
+							break;
+					}
+
+					data.datasets.unshift( dataset );
+					iMonth++;
 				}
 			
 				var options = {

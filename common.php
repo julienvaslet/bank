@@ -78,11 +78,11 @@ $template = new Template( RootPath. '/templates/'. TemplateName );
 $template->addVariable( 'TemplateUri', '/templates/'. TemplateName );
 
 $language = array(
-	"days" => array( "Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi" ),
-	"monthes" => array( "Janvier", "F&eacute;vrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Ao&ucirc;t", "Septembre", "Octobre", "Novembre", "D&eacute;cembre" ),
-	"date_format" => "%d/%m/%Y",
-	"date_pattern" => "[0-9]{2}/[0-9]{2}/[0-9]{4}",
-	"date_pattern_description" => "Date au format jj/mm/aaaa",
+	"days" => array( "dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi" ),
+	"short_days" => array( "dim", "lun", "mar", "mer", "jeu", "ven", "sam" ),
+	"monthes" => array( "janvier", "f&eacute;vrier", "mars", "avril", "mai", "juin", "juillet", "ao&ucirc;t", "septembre", "octobre", "novembre", "d&eacute;cembre" ),
+	"short_monthes" => array( "jan", "f&eacute;v", "mar", "avr", "mai", "juin", "juil", "ao&ucirc;", "sep", "oct", "nov", "d&eacute;c" ),
+	"date_format" => "d/m/Y",
 	"currency" => "&euro;"
 );
 
