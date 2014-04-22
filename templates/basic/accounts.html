@@ -27,11 +27,11 @@
 						<if exp="{transaction.odd}">
 						<tr class="pure-table-odd transaction transaction-{transaction.type} transaction-{transaction.value}">
 						<else />
-						<tr class="transaction transaction-{transaction.type}">
+						<tr class="transaction transaction-{transaction.type} transaction-{transaction.value}">
 						</if>
-							<td>
+							<td class="date">{transaction.date}</td>
+							<td class="label">
 								{transaction.label}
-								<span class="date">{transaction.date}</span>
 							</td>
 							<td class="amount">{transaction.amount}&nbsp;{language.currency}</td>
 						</tr>

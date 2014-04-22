@@ -1,0 +1,49 @@
+@font-face
+{
+	font-family: "Batch";
+	src: url("/templates/basic/fonts/batch-icons-webfont.eot");
+	src: url("/templates/basic/fonts/batch-icons-webfont.woff") format("woff"), url("/templates/basic/fonts/batch-icons-webfont.otf") format("opentype"), url("/templates/basic/fonts/batch-icons-webfont.svg#batch_iconsregular") format("svg");
+}
+
+tr.transaction td.label:before
+{
+	font-family: "Batch";
+	content: "\f020\0020";
+}
+
+tr.transaction.transaction-.transaction-positive td.label:before,
+tr.transaction-transfer.transaction-positive td.label:before
+{
+	content: "\f02a\0020";
+}
+
+tr.transaction.transaction-.transaction-negative td.label:before,
+tr.transaction-transfer.transaction-negative td.label:before
+{
+	content: "\f02b\0020";
+}
+
+tr.transaction-debit td.label:before
+{
+	content: "\f02d\0020";
+}
+           
+tr.transaction-withdrawal td.label:before
+{
+	content: "\f0d7\0020";
+}
+
+tr.transaction-credit-card td.label:before
+{
+	content: "\f104\0020";
+}
+
+tr.transaction-check td.label:before
+{
+	content: "\f136\0020";
+}
+
+tr.transaction-contribution td.label:before
+{
+	content: "\f02d\0020";
+}

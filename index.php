@@ -40,7 +40,7 @@ foreach( $accounts as $account )
 			"date" => $tDate,
 			"amount" => number_format( $lastTransactions[$i]->amount, 2, ",", "&nbsp;" ),
 			"type" => $lastTransactions[$i]->type,
-			"value" => $lastTransactions[$i]->amount > 0 ? "positive" : "negative",
+			"value" => floatval( $lastTransactions[$i]->amount ) >= 0 ? "positive" : "negative",
 			"odd" => $odd ? 1 : 0
 		) ) );
 
