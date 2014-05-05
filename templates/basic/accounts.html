@@ -72,6 +72,9 @@
 				var iMonth = 0;
 				for( var month in accounts[account] )
 				{
+					if( iMonth >= curveColors.length )
+						break;
+
 					var dataset = {
 						"fillColor": curveColors[iMonth].fillColor,
 						"strokeColor": curveColors[iMonth].strokeColor,

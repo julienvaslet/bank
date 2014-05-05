@@ -14,7 +14,7 @@ foreach( $accounts as $account )
 {
 	$accountBlock = new Block( "account" );
 	$transactions = Transaction::get( array( "account_id" => $account->account_id, "transaction_date" => array( ">=", $twoMonthesAgo ) ), "transaction_id DESC" );
-
+	
 	if( count( $transactions ) < 5 )
 		$lastTransactions = Transaction::get( array( "account_id" => $account->account_id ), "transaction_id DESC", 1, 5 );
 	else
