@@ -33,7 +33,7 @@ foreach( $accounts as $account )
 	{
 		$tDate = "";
 		$tTime = strtotime( !is_null( $lastTransactions[$i]->real_date ) ? $lastTransactions[$i]->real_date : $lastTransactions[$i]->transaction_date );
-		$tDate = date( "d", $tTime )." ".$language["short_monthes"][date( "n", $tTime )];
+		$tDate = date( "d", $tTime )." ".$language["short_monthes"][date( "n", $tTime ) - 1];
 
 		$accountBlock->addBlock( new Block( "transaction", array(
 			"label" => htmlentities( !is_null( $lastTransactions[$i]->short_label ) ? $lastTransactions[$i]->short_label : $lastTransactions[$i]->label ),
@@ -53,7 +53,6 @@ foreach( $accounts as $account )
 	$amounts[$currentMonth] = array();
 	$amounts[$currentMonth][date( "j" )] = floatval( $account->amount );
 	$tempAmount = floatval( $account->amount );
-
 	$time = 0;
 
 	foreach( $transactions as $transaction )
@@ -62,6 +61,11 @@ foreach( $accounts as $account )
 
 		if( !array_key_exists( date( "Y-m", $time ), $amounts ) )
 		{
+			// If there is no entry for the first of passed month, setting it
+			if( !array_key_exists( "1", $amounts[$currentMonth] ) )
+				$amounts[$currentMonth][1] = $tempAmount;
+			
+			// Creating new months data
 			$currentMonth = date( "Y-m", $time );
 			$amounts[$currentMonth] = array();
 		}
