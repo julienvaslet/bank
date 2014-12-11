@@ -18,26 +18,28 @@
 				</block>
 				};
 			</script>
-			<div id="account-{account.id}" class="account pure-u-1-2">
-				<h2>{account.name}<span class="amount">{account.amount}&nbsp;{language.currency}</span></h2>
-				<canvas class="chart"></canvas>
-				<table class="pure-table pure-table-bordered pure-table-striped">
-					<tbody>
-						<block name="transaction">
-						<if exp="{transaction.odd}">
-						<tr class="pure-table-odd transaction transaction-{transaction.type} transaction-{transaction.value}">
-						<else />
-						<tr class="transaction transaction-{transaction.type} transaction-{transaction.value}">
-						</if>
-							<td class="date">{transaction.date}</td>
-							<td class="label">
-								{transaction.label}
-							</td>
-							<td class="amount">{transaction.amount}&nbsp;{language.currency}</td>
-						</tr>
-						</block>
-					</tbody>
-				</table>
+			<div id="account-{account.id}" class="pure-u-1-2">
+				<div class="account">
+					<h2>{account.name}<span class="amount">{account.amount}&nbsp;{language.currency}</span></h2>
+					<canvas class="chart"></canvas>
+					<table class="pure-table pure-table-bordered pure-table-striped">
+						<tbody>
+							<block name="transaction">
+							<if exp="{transaction.odd}">
+							<tr class="pure-table-odd transaction transaction-{transaction.type} transaction-{transaction.value}">
+							<else />
+							<tr class="transaction transaction-{transaction.type} transaction-{transaction.value}">
+							</if>
+								<td class="date">{transaction.date}</td>
+								<td class="label">
+									{transaction.label}
+								</td>
+								<td class="amount">{transaction.amount}&nbsp;{language.currency}</td>
+							</tr>
+							</block>
+						</tbody>
+					</table>
+				</div>
 			</div>
 			</block>
 		</div>
@@ -60,9 +62,9 @@
 
 			for( var account in accounts )
 			{
-				var canvas = $("#" + account + " > canvas.chart");
+				var canvas = $("#" + account + " canvas.chart");
 				canvas.attr( { "width": canvas.width(), "height": canvas.width() / 2 } );
-				var ctx = $("#" + account + " > canvas.chart").get( 0 ).getContext( "2d" );
+				var ctx = $("#" + account + " canvas.chart").get( 0 ).getContext( "2d" );
 				var data = {
 					labels : [],
 					datasets : []

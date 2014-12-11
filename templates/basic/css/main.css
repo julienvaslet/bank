@@ -14,7 +14,6 @@ div.account
 {
 	margin: 20px;
 	padding: 20px;
-	padding-top: 0px;
 	background: #ffffff;
 	-moz-box-shadow: 0px 2px 6px rgba(100, 100, 100, 0.3);
 	-webkit-box-shadow: 0px 2px 6px rgba(100, 100, 100, 0.3);
@@ -24,6 +23,8 @@ div.account
 div.account > h2
 {
 	position: relative;
+	margin-top: 0px;
+	maring-bottom: 20px;
 	padding-right: 120px;
 }
 
