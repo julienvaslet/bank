@@ -3,7 +3,7 @@
 			var accounts = {};
 		</script>
 		<div class="header">
-			<h1>Comptes</h1>
+			<!--<h1>Comptes</h1>-->
 		</div>
 		<div class="content pure-g-r">
 			<block name="account">
@@ -18,9 +18,9 @@
 				</block>
 				};
 			</script>
-			<div id="account-{account.id}" class="pure-u-1-2">
-				<canvas class="chart" width="600" height="300"></canvas>
+			<div id="account-{account.id}" class="account pure-u-1-2">
 				<h2>{account.name}<span class="amount">{account.amount}&nbsp;{language.currency}</span></h2>
+				<canvas class="chart"></canvas>
 				<table class="pure-table pure-table-bordered pure-table-striped">
 					<tbody>
 						<block name="transaction">
@@ -60,6 +60,8 @@
 
 			for( var account in accounts )
 			{
+				var canvas = $("#" + account + " > canvas.chart");
+				canvas.attr( { "width": canvas.width(), "height": canvas.width() / 2 } );
 				var ctx = $("#" + account + " > canvas.chart").get( 0 ).getContext( "2d" );
 				var data = {
 					labels : [],

@@ -5,6 +5,49 @@
 	src: url("/templates/basic/fonts/batch-icons-webfont.woff") format("woff"), url("/templates/basic/fonts/batch-icons-webfont.otf") format("opentype"), url("/templates/basic/fonts/batch-icons-webfont.svg#batch_iconsregular") format("svg");
 }
 
+body
+{
+	background: #e6e6e6;
+}
+
+div.account
+{
+	margin: 20px;
+	padding: 20px;
+	padding-top: 0px;
+	background: #ffffff;
+	-moz-box-shadow: 0px 2px 6px rgba(100, 100, 100, 0.3);
+	-webkit-box-shadow: 0px 2px 6px rgba(100, 100, 100, 0.3);
+	box-shadow: 0px 2px 6px rgba(100, 100, 100, 0.3);
+}
+
+div.account > h2
+{
+	position: relative;
+	padding-right: 120px;
+}
+
+div.account > h2 > span.amount
+{
+	position: absolute;
+	display: block;
+	top: 0px;
+	right: 0px;
+}
+
+div.account > canvas.chart
+{
+	display: block;
+	margin: auto;
+	padding-bottom: 15px;
+	width: 100%;
+}
+
+div.account > table
+{
+	width: 100%;
+}
+
 tr.transaction td.label:before
 {
 	font-family: "Batch";
