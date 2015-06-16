@@ -22,7 +22,7 @@ foreach( $accounts as $account )
 
 	$accountBlock->addVariables( array(
 		"id" => $account->account_id,
-		"name" => htmlentities( $account->account_name ),
+		"name" => htmlentities( $account->getAccountName() ),
 		"amount" => number_format( $account->amount, 2, ",", "&nbsp;" ),
 		"transactions_count" => count( $lastTransactions )
 	) );
@@ -32,7 +32,7 @@ foreach( $accounts as $account )
 	for( $i = 0 ; $i < count( $lastTransactions ) && $i < 5 ; $i++ )
 	{
 		$tDate = "";
-		$tTime = strtotime( !is_null( $lastTransactions[$i]->real_date ) ? $lastTransactions[$i]->real_date : $lastTransactions[$i]->transaction_date );
+		$tTime = strtotime( $lastTransactions[$i]->transaction_date );
 		$tDate = date( "d", $tTime )." ".$language["short_monthes"][date( "n", $tTime ) - 1];
 
 		$accountBlock->addBlock( new Block( "transaction", array(
@@ -122,6 +122,16 @@ foreach( $accounts as $account )
 	
 	$template->addBlock( $accountBlock );
 }
+
+// Limits
+
+
+$template->addVariables( array(
+	"withdrawalLimit" => number_format( $config["limits.withdrawal.amount"], 2, ",", "&nbsp;" ),
+	"paymentLimit" => number_format( $config["limits.credit-card.amount"], 2, ",", "&nbsp;" ),
+	"currentPaymentAmount" => number_format( Transaction::getLastTransactionsAmount( "credit-card", $config["limits.credit-card.days"] ), 2, ",", "&nbsp;" ),
+	"currentWithdrawalAmount" => number_format( Transaction::getLastTransactionsAmount( "withdrawal", $config["limits.withdrawal.days"] ), 2, ",", "&nbsp;" )
+) );
 
 $template->show( "accounts.html" );
 ?>

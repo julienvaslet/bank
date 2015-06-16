@@ -10,9 +10,37 @@ body
 	background: #e6e6e6;
 }
 
+ul.monthes
+{
+	text-align: center;
+	margin: 0;
+	margin-top: 15px;
+	padding-left: 0px;
+}
+
+ul.monthes > li
+{
+	display: inline-block;
+	list-style: none;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+ul.monthes > li > a
+{
+	font-size: 1em;
+	color: #000000;
+	text-decoration: none;
+}
+
+ul.monthes > li > a.selected
+{
+	font-size: 1.2em;
+}
+
 div.account
 {
-	margin: 20px;
+	margin: 10px 15px;
 	padding: 20px;
 	background: #ffffff;
 	-moz-box-shadow: 0px 2px 6px rgba(100, 100, 100, 0.3);
@@ -28,7 +56,19 @@ div.account > h2
 	padding-right: 120px;
 }
 
-div.account > h2 > span.amount
+div.account > h2 > a
+{
+	color: #000000;
+	text-decoration: none;
+}
+
+div.account > h2 > a.back:before
+{
+	font-family: "Batch";
+	content: "\f14a\0020";
+}
+
+div.account > h2 span.amount
 {
 	position: absolute;
 	display: block;
@@ -90,4 +130,24 @@ tr.transaction-check td.label:before
 tr.transaction-contribution td.label:before
 {
 	content: "\f02d\0020";
+}
+
+/* Limits */
+
+div.account > span.limit
+{
+	display: block;
+	text-align: center;
+}
+
+div.account > span.limit.withdrawal:before
+{
+	font-family: "Batch";
+	content: "\f0d7\0020";
+}
+
+div.account > span.limit.credit-card:before
+{
+	font-family: "Batch";
+	content: "\f104\0020";
 }

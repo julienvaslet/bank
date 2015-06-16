@@ -6,6 +6,19 @@
 			<!--<h1>Comptes</h1>-->
 		</div>
 		<div class="content pure-g-r">
+			<!-- withdrawal & payment limits -->
+			<div class="pure-u-1-2">
+				<div class="account">
+					<span class="limit withdrawal">{currentWithdrawalAmount}&nbsp;{language.currency}&nbsp;/&nbsp;{withdrawalLimit}&nbsp;{language.currency}</span>
+				</div>
+			</div>
+			<div class="pure-u-1-2">
+				<div class="account">
+					<span class="limit credit-card">{currentPaymentAmount}&nbsp;{language.currency}&nbsp;/&nbsp;{paymentLimit}&nbsp;{language.currency}</span>
+				</div>
+			</div>
+
+			<!-- Accounts -->
 			<block name="account">
 			<script type="text/javascript">
 				accounts["account-{account.id}"] = {
@@ -20,7 +33,7 @@
 			</script>
 			<div id="account-{account.id}" class="pure-u-1-2">
 				<div class="account">
-					<h2>{account.name}<span class="amount">{account.amount}&nbsp;{language.currency}</span></h2>
+					<h2><a href="/account.php?account_id={account.id}">{account.name}<span class="amount">{account.amount}&nbsp;{language.currency}</span></a></h2>
 					<canvas class="chart"></canvas>
 					<table class="pure-table pure-table-bordered pure-table-striped">
 						<tbody>

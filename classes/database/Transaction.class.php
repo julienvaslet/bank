@@ -83,6 +83,27 @@ final class Transaction extends Object
 	public $type;
 	public $third_party;
 	public $short_label;
+
+	public static function getLastTransactionsAmount( $transaction_type, $days )
+	{
+		$amount = 0;
+
+		$date = date( "Y-m-d", mktime( 0, 0, 0, date("n"), date("j") - intval( $days ), date("Y") ) );
+		$db = Database::getInstance();
+		$selectors = array( "type" => $transaction_type, "transaction_date" => array( ">=", $date ) );
+			
+		$query = "SELECT SUM(`amount`) AS `sum` FROM `".static::$schema."`.`".static::$table."` WHERE ".static::getSqlSelectors( $selectors );
+			
+		$result = $db->query( $query );
+
+		if( $result )
+		{
+			$row = $result->fetch_assoc();
+			$amount = -1 * floatval( $row['sum'] );
+		}
+
+		return $amount;
+	}
 }
 
 ?>

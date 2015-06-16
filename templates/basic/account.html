@@ -1,0 +1,125 @@
+<include file="header.html" />
+		<div class="header">
+			<!--<h1>Comptes</h1>-->
+		</div>
+		<div class="content pure-g-r">
+			<script type="text/javascript">
+				account = {
+				<block name="graphMonth">
+					"{graphMonth.month}": {
+					<block name="graphDay">
+					"{graphDay.day}": {graphDay.amount}<if exp="{graphDay.notLast}">,</if>
+					</block>
+					}<if exp="{graphMonth.notLast}">,</if>
+				</block>
+				};
+			</script>
+			<ul class="monthes pure-u-1-1">
+				<li><a href="/account.php?account_id={accountId}&month={previousMonthDate}">{previousMonth}</a></li>
+				<li><a class="selected">{currentMonth}</a></li>
+				<li><a href="/account.php?account_id={accountId}&month={nextMonthDate}">{nextMonth}</a></li>
+			</ul>
+			<div id="account" class="pure-u-1-1">
+				<div class="account">
+					<h2>
+						<a href="/" class="back"></a>
+						<a href="/account.php?account_id={accountId}">{accountName}</a>
+						<span class="amount">{accountAmount}&nbsp;{language.currency}</span>
+					</h2>
+					<canvas class="chart"></canvas>
+					<table class="pure-table pure-table-bordered pure-table-striped">
+						<tbody>
+							<block name="transaction">
+							<if exp="{transaction.odd}">
+							<tr class="pure-table-odd transaction transaction-{transaction.type} transaction-{transaction.value}">
+							<else />
+							<tr class="transaction transaction-{transaction.type} transaction-{transaction.value}">
+							</if>
+								<td class="date">{transaction.date}</td>
+								<td class="label">
+									{transaction.label}
+								</td>
+								<td class="amount">{transaction.amount}&nbsp;{language.currency}</td>
+							</tr>
+							</block>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			</block>
+		</div>
+		
+		<script type="text/javascript">
+		jQuery( function()
+		{
+			var curveColors = [ {
+				"fillColor": "rgba(151,187,205,0.5)",
+				"strokeColor": "rgba(151,187,205,1.0)",
+				"pointColor": "rgba(151,187,205,1.0)",
+				"pointStrokeColor": "#ffffff"
+			},
+			{
+				"fillColor": "rgba(220,220,220,0.5)",
+				"strokeColor": "rgba(220,220,220,1.0)",
+				"pointColor": "rgba(220,220,220,1.0)",
+				"pointStrokeColor": "#ffffff"
+			} ];
+
+			var canvas = $("#account canvas.chart");
+			canvas.attr( { "width": canvas.width(), "height": canvas.width() / 4 } );
+			var ctx = $("#account canvas.chart").get( 0 ).getContext( "2d" );
+			var data = {
+				labels : [],
+				datasets : []
+			};
+
+			for( var i = 1 ; i <= 31 ; i++ )
+				data.labels.push( i );
+			
+			var iMonth = 0;
+			for( var month in account )
+			{
+				if( iMonth >= curveColors.length )
+					break;
+
+				var dataset = {
+					"fillColor": curveColors[iMonth].fillColor,
+					"strokeColor": curveColors[iMonth].strokeColor,
+					"pointColor": curveColors[iMonth].pointColor,
+					"pointStrokeColor": curveColors[iMonth].pointStrokeColor,
+					"data": []
+				};
+
+				var lastAmount = null;
+				var lastDay = "";
+
+				for( var day in account[month] )
+					lastDay = day;
+
+				for( var i in data.labels )
+				{
+					if( typeof account[month][data.labels[i]] != "undefined" )
+					{
+						dataset.data.push( account[month][data.labels[i]] );
+						lastAmount = account[month][data.labels[i]];
+					}
+					else if( lastAmount != null && lastDay >= data.labels[i] )
+						dataset.data.push( lastAmount );
+					else if( lastAmount != null )
+						break;
+				}
+
+				data.datasets.unshift( dataset );
+				iMonth++;
+			}
+		
+			var options = {
+				"animation": false,
+				"scaleLabel": "<%= value %> €"
+			};
+
+			var chart = new Chart(ctx).Line( data, options );
+
+		} );
+		</script>
+<include file="footer.html" />

@@ -10,6 +10,12 @@ use database\Object;
 
 new Database( "127.0.0.1", 3306, "money", "money", "money" );
 
+$config = array();
+$config["limits.withdrawal.amount"] = 500;
+$config["limits.withdrawal.days"] = 30;
+$config["limits.credit-card.amount"] = 2500;
+$config["limits.credit-card.days"] = 30;
+
 
 /*
  * Global functions
