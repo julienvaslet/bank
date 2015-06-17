@@ -44,11 +44,72 @@ $oneMonthBefore = date( 'Y-m-d', mktime( 0, 0, 0, $month - 1, 1, $year ) );
 $transactions = Transaction::get( array( "account_id" => $account->account_id, "transaction_date" => array( array( ">=", $oneMonthBefore ), array( "<", $oneMonthAfter ) ) ), "transaction_id DESC" );
 
 $template->addVariables( array(
-		"accountId" => $account->account_id,
-		"accountName" => htmlentities( $account->getAccountName() )
-	) );
+	"accountId" => $account->account_id,
+	"accountName" => htmlentities( $account->getAccountName() )
+) );
 
 
+// Balance computation
+$balance = array();
+$balanceTotalNegative = 0;
+$balanceTotalPositive = 0;
+
+foreach( $transactions as $transaction )
+{
+	$time = strtotime( $transaction->transaction_date );
+
+	// Exit if transaction is not included in this month
+	if( date( "m", $time ) != $month )
+		break;
+
+	// Ignore null transactions
+	if( intval( $transaction->amount ) == 0 )
+		continue;
+
+	// Force unknown transaction to transfer
+	if( $transaction->type == "" )
+		$transaction->type = "transfer";
+
+	if( !array_key_exists( $transaction->type, $balance ) )
+		$balance[$transaction->type] = array( "positive" => 0, "negative" => 0 );
+
+	if( $transaction->amount < 0 )
+	{
+		$balance[$transaction->type]["negative"] += floatval( $transaction->amount );
+		$balanceTotalNegative += floatval( $transaction->amount );
+	}
+	else
+	{
+		$balance[$transaction->type]["positive"] += floatval( $transaction->amount );
+		$balanceTotalPositive += floatval( $transaction->amount );
+	}
+		
+}
+
+$odd = true;
+foreach( $balance as $type => $amounts )
+{
+	$template->addBlock( new Block( "balance", array(
+		"odd" => $odd,
+		"name" => $language["transaction.type.".$type],
+		"positive" => number_format( $amounts["positive"], 2, ",", "&nbsp;" ),
+		"negative" => number_format( $amounts["negative"], 2, ",", "&nbsp;" ),
+		"total" => number_format( $amounts["positive"] + $amounts["negative"], 2, ",", "&nbsp;" ),
+		"type" => $type
+	) ) );
+
+	$odd = !$odd;
+}
+
+$template->addVariables( array(
+	"balanceTotalNegative" => number_format( $balanceTotalNegative, 2, ",", "&nbsp;" ),
+	"balanceTotalPositive" => number_format( $balanceTotalPositive, 2, ",", "&nbsp;" ),
+	"balanceTotal" => number_format( $balanceTotalPositive + $balanceTotalNegative, 2, ",", "&nbsp;" ),
+	"balanceTotalOdd" => $odd
+) );
+
+
+// Month's transactions
 $odd = true;
 for( $i = 0 ; $i < count( $transactions ) ; $i++ )
 {

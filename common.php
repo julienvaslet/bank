@@ -89,7 +89,16 @@ $language = array(
 	"monthes" => array( "janvier", "f&eacute;vrier", "mars", "avril", "mai", "juin", "juillet", "ao&ucirc;t", "septembre", "octobre", "novembre", "d&eacute;cembre" ),
 	"short_monthes" => array( "jan", "f&eacute;v", "mar", "avr", "mai", "juin", "juil", "ao&ucirc;", "sep", "oct", "nov", "d&eacute;c" ),
 	"date_format" => "d/m/Y",
-	"currency" => "&euro;"
+	"currency" => "&euro;",
+	"balance" => "Balance",
+	"forecasts" => "Pr&eacute;visions",
+	"total" => "Total",
+	"transaction.type.credit-card" => "Carte bancaire",
+	"transaction.type.withdrawal" => "Retrait",
+	"transaction.type." => "Inconnu",
+	"transaction.type.transfer" => "Virement",
+	"transaction.type.debit" => "Pr&eacute;l&egrave;vement",
+	"transaction.type.check" => "Ch&egrave;que"
 );
 
 function addLanguageVariables( $variables, $basename )

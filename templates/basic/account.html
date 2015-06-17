@@ -14,11 +14,57 @@
 				</block>
 				};
 			</script>
+
+			<!-- Monthes -->
 			<ul class="monthes pure-u-1-1">
 				<li><a href="/account.php?account_id={accountId}&month={previousMonthDate}">{previousMonth}</a></li>
 				<li><a class="selected">{currentMonth}</a></li>
 				<li><a href="/account.php?account_id={accountId}&month={nextMonthDate}">{nextMonth}</a></li>
 			</ul>
+
+			<!-- Balance -->
+			<div class="pure-u-1-2">
+				<div class="account">
+					<h2>{language.balance}</h2>
+
+					<table class="pure-table pure-table-bordered pure-table-striped">
+						<tbody>
+							<block name="balance">
+							<if exp="{balance.odd}">
+							<tr class="pure-table-odd transaction transaction-{balance.type} transaction-negative">
+							<else />
+							<tr class="transaction transaction-{balance.type} transaction-negative">
+							</if>
+								<td class="label">{balance.name}</td>
+								<td>{balance.negative}&nbsp;{language.currency}</td>
+								<td>{balance.positive}&nbsp;{language.currency}</td>
+								<td>{balance.total}&nbsp;{language.currency}</td>
+							</tr>
+							</block>
+							
+							<if exp="{balanceTotalOdd}">
+							<tr class="pure-table-odd balance-total">
+							<else />
+							<tr class="balance-total">
+							</if>
+								<td>{language.total}</td>
+								<td>{balanceTotalNegative}&nbsp;{language.currency}</td>
+								<td>{balanceTotalPositive}&nbsp;{language.currency}</td>
+								<td>{balanceTotal}&nbsp;{language.currency}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<!-- Forecasts -->
+			<div class="pure-u-1-2">
+				<div class="account">
+					<h2>{language.forecasts}</h2>
+				</div>
+			</div>
+
+
 			<div id="account" class="pure-u-1-1">
 				<div class="account">
 					<h2>

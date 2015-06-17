@@ -14,7 +14,8 @@ ul.monthes
 {
 	text-align: center;
 	margin: 0;
-	margin-top: 15px;
+	margin-top: 10px;
+	margin-bottom: 5px;
 	padding-left: 0px;
 }
 
@@ -151,3 +152,6 @@ div.account > span.limit.credit-card:before
 	font-family: "Batch";
 	content: "\f104\0020";
 }
+
+/* Outgoings */
+
